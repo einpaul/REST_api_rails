@@ -1,16 +1,20 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
-require 'spec_helper'
 
 # require database cleaner at the top level
 require 'database_cleaner'
+
+
 
 ENV['RAILS_ENV'] ||= 'test'
 
 require File.expand_path('../config/environment', __dir__)
 
+# This file is copied to spec/ when you run 'rails generate rspec:install'
+require 'spec_helper'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+
+
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -44,6 +48,7 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 
 RSpec.configure do |config|
@@ -52,6 +57,7 @@ RSpec.configure do |config|
    # add `FactoryBot` methods
   config.include FactoryBot::Syntax::Methods
 
+  config.include RequestSpecHelper, type: :request
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   config.before(:suite) do
